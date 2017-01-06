@@ -76,18 +76,18 @@ router.route('/user/:user_id')
     .get(function(req,res,next){
         console.log('已执行router.route 的 get');
         res.setHeader('Content-Type','text/html');
-        res.write('<form method="post">');
+        res.write('<form method="post" enctype="application/x-www-form-urlencoded">');
         res.write('<input type="text" name="user_name" value="xmily"/>');
         res.write('<input type="submit" value="Submit for POST"/>');
         res.write('</form>');
 
-        res.write('<form method="put">');
+        res.write('<form method="put" enctype="application/x-www-form-urlencoded">');
         res.write('<input type="text" name="user_name" value="xmily"/>');
         res.write('<input type="submit" value="Submit for PUT"/>');
         res.write('<input type="hidden" value="DELETE" name="_method"/>');
         res.write('</form>');
 
-        res.write('<form method="delete">');
+        res.write('<form method="delete" enctype="application/x-www-form-urlencoded">');
         res.write('<input type="text" name="user_name" value="xmily"/>');
         res.write('<input type="submit" value="Submit for DELETE"/>');
         res.write('<input type="hidden" value="DELETE" name="_method"/>');
