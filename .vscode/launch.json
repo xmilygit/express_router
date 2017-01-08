@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "start",
-            "program": "${workspaceRoot}\\index2.js",
+            "program": "${workspaceRoot}\\wechat.js",
             "cwd": "${workspaceRoot}"
         },
         {

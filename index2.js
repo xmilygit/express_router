@@ -81,13 +81,13 @@ router.route('/user/:user_id')
         res.write('<input type="submit" value="Submit for POST"/>');
         res.write('</form>');
 
-        res.write('<form method="put" enctype="application/x-www-form-urlencoded">');
+        res.write('<form method="post" enctype="application/x-www-form-urlencoded">');
         res.write('<input type="text" name="user_name" value="xmily"/>');
         res.write('<input type="submit" value="Submit for PUT"/>');
-        res.write('<input type="hidden" value="DELETE" name="_method"/>');
+        res.write('<input type="hidden" value="PUT" name="_method"/>');
         res.write('</form>');
 
-        res.write('<form method="delete" enctype="application/x-www-form-urlencoded">');
+        res.write('<form method="post" enctype="application/x-www-form-urlencoded">');
         res.write('<input type="text" name="user_name" value="xmily"/>');
         res.write('<input type="submit" value="Submit for DELETE"/>');
         res.write('<input type="hidden" value="DELETE" name="_method"/>');
