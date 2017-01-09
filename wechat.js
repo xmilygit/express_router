@@ -4,6 +4,7 @@ var xml2js=require('xml2js');
 var xmlparser=require('express-xml-bodyparser');
 var crypto = require('crypto');
 var fs = require('fs');  
+var request=require('request');
 //console.log(crypto.getHashes());
 //fjxxmail2的登录配置
 //var myauth={
@@ -228,14 +229,28 @@ router.get('/wechat',function(req,res,next){
 })
 
 router.get('/',function(req,res,next){
-    console.log("code:"+req.query['code']+"/nopenid:"+req.query['openid']);
-    res.end('<h1>'+req.query['code']+'</h1>');
+    let reqUrl="https://api.weixin.qq.com/sns/oauth2/access_token?appid="+myauth.appid+"&secret="+myauth.appsecret+"&code="+req.query['code']+"&grant_type=authorization_code";
+    request(reqUrl,function(err,res2,body){
+        if(!err&&res2.statusCode==200){
+            useinfo=JSON.parse(body)
+            console.log(useinfo);
+            console.log("code:"+req.query['code']+"openid:"+useinfo.openid);
+            res.end('<h1>'+req.query['code']+'</h1></br><h1>'+useinfo.openid+'</h1>');
+        }else{
+            res.end();
+        }
+    })    
+})
+
+router.get('/test',function(req,res,next){
+    res.end('{"a":"1","b":"2"}');
 })
 
 
 app.use(xmlparser());
 app.post('/wechat',router);
 app.get('/wechat',router);
+app.get('/test',router);
 app.get('/',router);
 
 console.log('微信服务端开始监听');
