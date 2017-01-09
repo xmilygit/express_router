@@ -52,6 +52,7 @@ function sendMsg(recvMsg, repalyContent) {
     sendTextXml.xml.FromUserName = recvMsg.tousername;
     sendTextXml.xml.MsgType = 'Text';
     sendTextXml.xml.Content = repalyContent;
+    console.log(sendTextXml);
     return jstoxml.buildObject(sendTextXml);
 }
 
@@ -115,49 +116,58 @@ router.post('/wechat',function(req,res,next){
     console.log(msg);
     switch (msg.msgtype[0]) {
         case 'text':
-            if (msg.content[0] !== '创建菜单') {
-                res.end(sendMsg(msg, '你输入的是：' + msg.content));
-            } else {
-                api.getMenu(function (err, result) {
-                    if (err) {
-                        res.end(sendMsg(msg, '创建菜单失败' + err.code + ':' + err.message));
-                        if (err.code == 46003) {
-                            api.sendText(msg.fromusername[0], '开始创建菜单', function (err, result) {
+            switch(msg.content[0]){
+                case '链接':
+                    api.sendText(msg.fromusername[0], '<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + myauth.appid + '&redirect_uri=' + encodeURIComponent("http://fjxx.tunnel.2bdata.com/") + '&response_type=code&scope=snsapi_base&state=123#wechat_redirect">链接</a>', function (err, result) {
+                        if (err) {
+                            console.log(err.code + err.message);
+                        }
+                    });
+                    break;
+                case '创建菜单':
+                    api.getMenu(function (err, result) {
+                        if (err) {
+                            res.end(sendMsg(msg, '创建菜单失败' + err.code + ':' + err.message));
+                            if (err.code == 46003) {
+                                api.sendText(msg.fromusername[0], '开始创建菜单', function (err, result) {
+                                    if (err) {
+                                        console.log(err.code + err.message);
+                                    }
+                                });
+
+                                api.createMenu(menu, function (err, result) {
+                                    if (err) {
+                                        api.sendText(msg.fromusername[0], '创建失败' + err.code + err.message, function (err, result) {
+                                            if (err) {
+                                                console.log(err.code + err.message);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        api.sendText(msg.fromusername[0], '创建成功请重新关注查看结果', function (err, result) {
+                                            if (err) {
+                                                console.log(err.code + err.message);
+                                            }
+                                        });
+                                    }
+                                });
+
+                            }
+
+                        } else {
+
+                            console.log(result);
+                            api.sendText(msg.fromusername[0], '菜单已经建立', function (err, result) {
                                 if (err) {
                                     console.log(err.code + err.message);
                                 }
                             });
-
-                            api.createMenu(menu, function (err, result) {
-                                if (err) {
-                                    api.sendText(msg.fromusername[0], '创建失败' + err.code + err.message, function (err, result) {
-                                        if (err) {
-                                            console.log(err.code + err.message);
-                                        }
-                                    });
-                                }
-                                else {
-                                    api.sendText(msg.fromusername[0], '创建成功请重新关注查看结果', function (err, result) {
-                                        if (err) {
-                                            console.log(err.code + err.message);
-                                        }
-                                    });
-                                }
-                            });
-
                         }
-
-                    } else {
-
-                        console.log(result);
-                        api.sendText(msg.fromusername[0], '菜单已经建立', function (err, result) {
-                            if (err) {
-                                console.log(err.code + err.message);
-                            }
-                        });
-                    }
-                });
-                //res.end(sendMsg(msg, '开始创建菜单：' + msg.content));
+                    });
+                    break;
+                default:
+                res.end(sendMsg(msg, '你输入的是：' + msg.content));
+                break;
             }
             break;
         case 'event':
@@ -218,7 +228,8 @@ router.get('/wechat',function(req,res,next){
 })
 
 router.get('/',function(req,res,next){
-    res.end('ok');
+    console.log("code:"+req.query['code']+"/nopenid:"+req.query['openid']);
+    res.end('<h1>'+req.query['code']+'</h1>');
 })
 
 
