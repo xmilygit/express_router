@@ -243,6 +243,7 @@ router.get('/',function(req,res,next){
 })
 
 router.get('/test',function(req,res,next){
+    api.get
     res.end('{"a":"1","b":"2"}');
 })
 
