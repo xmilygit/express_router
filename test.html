@@ -1,0 +1,45 @@
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js">
+</script>
+
+<script>
+
+    wx.config({ "debug": true, "appId": "wxba8db6584881bbab", "timestamp": "1485112760", "nonceStr": "xnu1xx69q02qku4", "signature": "6fc64f10e020cbb3d3d4f6cb61e8d2fbf904d7d3", "jsApiList": ["onMenuShareTimeline", "onMenuShareAppMessage", "scanQRCode"] });
+
+    wx.ready(function () {
+
+        wx.checkJsApi({
+
+            'jsApiList': ['onMenuShareTimeline', 'onMenuShareAppMessage', 'scanQRCode'],
+
+            success: function (res) {
+
+                alert(JSON.stringify(res));
+
+            }
+        });
+
+        wx.scanQRCode({
+
+            needResult: 1,
+
+            scanType: ['qrCode', 'barCode'],
+
+            success: function (res) {
+
+                var result = res.resultStr;
+
+                alert(result)
+
+            }
+
+        });
+
+    });
+
+    wx.error(function (res) {
+
+        alert(res)
+
+    });
+
+</script>
